@@ -6,6 +6,9 @@ All notable changes to FinanceTracker are documented here.
 
 ## [Unreleased]
 
+### Fixed
+- **`TransactionImportActor.existingHashes()` fetched with `propertiesToFetch`, which made CSV import dedup slower, not faster** — verified via live Core Data SQL debug logging that SwiftData still issues one full-column `SELECT ... WHERE Z_PK = ?` per returned row on top of the narrower initial query, so the net effect at import scale was more round trips than a plain fetch, not fewer. Removed `propertiesToFetch`; existing correctness tests (`existingHashesReturnsAllStoredHashes`, `existingHashesReturnsEmptySetForFreshStore`) already cover behavior before and after.
+
 ### Added
 - **`DemoDataSeeder` now covers 3 months of history and an over-budget category** — previously only seeded the current month, so `AccountDetailView`'s Balance History and `BudgetDetailView`'s Spending History charts (both trend across months) never showed a real multi-point trend in `--seedscreenshots`/demo builds, and no seeded budget ever exceeded its limit, so the destructive/over-budget progress-bar state was never visually exercised. Added a Transportation transaction that pushes it $15 over its $150 budget, plus 2 additional months of transactions across the same accounts/categories.
 - **`DashboardView` adopts Glass Cards** — Net Worth and Spending cards now use `Theme.Glass`'s translucent material + tinted gradient + shadow (tokens added in a prior PR), replacing the flat opacity-tint background. The now-dead `Theme.Colors.netWorthCardBackground`/`spendingCardBackground` tokens are removed, along with their `docs/design-system.md` entries; verified visually in both light and Dark Mode.
