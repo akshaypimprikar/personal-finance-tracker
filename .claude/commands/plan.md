@@ -18,6 +18,8 @@ Before writing, read:
 - `.claude/context/feature-log.md` — release history; know what already exists (skip if absent)
 - All files the spec says will be touched
 
+When a task depends on the exact behavior of an Apple API, fetch `https://developer.apple.com/documentation/<path>.md` (append `.md` to any doc URL) instead of the HTML page — clean Markdown, lighter to load.
+
 The plan must be executable by a subagent with no prior context. Every task needs:
 - Exact file paths (all source files live under `FinanceTracker/` at the git root)
 - Complete code (no placeholders, no "implement X")
